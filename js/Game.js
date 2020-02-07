@@ -66,7 +66,7 @@ Vue.component('game', {
 	methods: {
 		end() {
 			this.ended = true;
-			this.mineCells.forEach(cell => cell.flipped);
+			this.mineCells.forEach(cell => cell.flip(true));
 		},
 		mousedownCell() {
 			let ts = Date.now();
@@ -94,7 +94,7 @@ Vue.component('game', {
 
 			let cells = this.getCellGroup([], cell);
 
-			if (cell.flippable || this.flaggedNeighborCount(cell) >= cell.proximityCount) {
+			if (cell.flippable || this.flaggedNeighborCount(cell) == cell.proximityCount) {
 				let mines = cells.filter(cell => cell.mine);
 
 				if (mines.length > 0) this.flipCell(mines[0]);
@@ -113,7 +113,7 @@ Vue.component('game', {
 			this.flipFromCell(cell);
 		},
 		flipCell(cell) {
-			cell.flipped = true;
+			cell.flip();
 
 			if (cell.mine || this.won) this.end();
 		},

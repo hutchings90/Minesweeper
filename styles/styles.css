@@ -94,6 +94,6 @@ body {
 	float: right;
 }
 
-img.flipped-flag {
+.faded {
 	opacity: .5;
 }

@@ -2,22 +2,30 @@ Vue.component('game-board-cell', {
 	props: [ 'cell', 'size', 'clickingCell' ],
 	template: `<div @mouseenter=mouseenter @mouseleave=mouseleave @mousedown=mousedown($event) @mouseup=mouseup($event) @contextmenu=mark($event) :style=style :class=classObject class='game-board-cell'>
 		<img :src=backgroundSrc />
+
 		<template v-if=flipped>
 			<img v-if=cell.mine :src=mineSrc />
 			<img v-else-if='proximityCount > 0' :src=proximityCountSrc />
-			<img v-if=flagged :src=flaggedSrc class='flipped-flag' />
 		</template>
-		<template v-else>
-			<img v-if=flagged :src=flaggedSrc />
-			<img v-else-if=flipped :src=flippedSrc />
-			<img v-else-if=suspect :src=suspectSrc />
-			<img v-if=showMouseHover :src=mouseActiveSrc />
-		</template>
+
+		<img v-if=flagged :src=flaggedSrc :class=flaggedClass />
+		<img v-if=suspect :src=suspectSrc :class=suspectClass />
+		<img v-if=showMouseHover :src=mouseActiveSrc />
 	</div>`,
 	computed: {
 		classObject() {
 			return {
 				unflipped: !this.flipped
+			};
+		},
+		flaggedClass() {
+			return {
+				faded: this.flipped
+			};
+		},
+		suspectClass() {
+			return {
+				faded: this.flipped
 			};
 		},
 		mouseActive: {
@@ -34,7 +42,7 @@ Vue.component('game-board-cell', {
 		flippedSrc() { return this.dir + 'flipped.png'; },
 		suspectSrc() { return this.dir + 'suspect.png'; },
 		backgroundSrc() { return this.dir + (this.flipped || (!this.flagged && this.mouseActive && this.clickingCell) ? 'flipped' : 'blank') + '.png'; },
-		showMouseHover() { return !this.clickingCell && this.mouseActive; },
+		showMouseHover() { return !this.flipped && !this.clickingCell && this.mouseActive; },
 		mouseActiveSrc() { return this.dir + 'hover.png'; },
 		proximityCountSrc() { return this.dir + this.proximityCount + '.png'; },
 		borderWidth() { return 2; },

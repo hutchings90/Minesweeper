@@ -38,6 +38,15 @@ class GameBoardCell {
 		else this.flagged = true;
 	}
 
+	flip(maintainStatus) {
+		this.flipped = true;
+
+		if (!maintainStatus) {
+			this.flagged = false;
+			this.suspect = false;
+		}
+	}
+
 	init(forNewBoard) {
 		this.flipped = false;
 		this.flagged = false;
